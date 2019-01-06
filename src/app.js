@@ -4,6 +4,8 @@ const express = require('express')
 const path = require('path')
 // 2 创建app
 const app = express()
+// node中处理静态资源
+app.use(express.static(path.join(__dirname,'statics')))
 //导入集成路由中间件
 const accountRouter = require(path.join(__dirname,'./routers/accountRouter.js'))
 app.use('/account',accountRouter)
