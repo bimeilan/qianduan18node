@@ -12,5 +12,7 @@ accountRouter.get('/vcode',accountCTRL.getImageVcode)
 accountRouter.get('/register',accountCTRL.getRegisterPage)
 // 处理注册请求
 accountRouter.post('/register',accountCTRL.register)
+// 处理注册请求
+accountRouter.post('/login',accountCTRL.login)
 // 导出路由模块
 module.exports=accountRouter

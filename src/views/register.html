@@ -45,7 +45,7 @@
 function register () {
     const username = $("#usernameId").val()
     // 对密码进行加密 md5是函数
-    const password =$.md5($("#passwordId").val()) 
+    const password =$.md5($("#passwordId").val()+"BMM!@#") 
 
     //2 使用ajax发送post请求
     $.post('/account/register',{username,password},function(data,textStatus,jqXHR){
