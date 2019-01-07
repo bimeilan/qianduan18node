@@ -8,5 +8,9 @@ const accountCTRL = require(path.join(__dirname,'../controllers/accountControlle
 accountRouter.get('/login',accountCTRL.getLoginPage)
 // 获取图片验证码
 accountRouter.get('/vcode',accountCTRL.getImageVcode)
+// 获取注册页面
+accountRouter.get('/register',accountCTRL.getRegisterPage)
+// 处理注册请求
+accountRouter.post('/register',accountCTRL.register)
 // 导出路由模块
 module.exports=accountRouter
