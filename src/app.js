@@ -16,9 +16,11 @@ app.use(bodyParser.urlencoded({extended:false}))
 app.use(bodyParser.json())
 // 使用session中间件  60000是时间毫秒  1分钟
 app.use(session({secret:'keyboard cat',resave:true,saveUninitialized:true,cookie:{maxAge:60000}}))
-//导入集成路由中间件   要放在最后面
+//导入集成路由中间件   要放在所有中间件的后面
 const accountRouter = require(path.join(__dirname,'./routers/accountRouter.js'))
+const studentManagerRouter = require(path.join(__dirname,'./routers/studentManagerRouter.js'))
 app.use('/account',accountRouter)
+app.use('/studentmanager',studentManagerRouter)
 // 3 请求处理和响应
 // app.get('/index',(req,res)=>{
 //     res.send('hello')
