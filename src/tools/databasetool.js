@@ -80,3 +80,17 @@ exports.updateOne = (collectionName,condition,params,callback) => {
         })
     })
 }
+
+//删除一个学生信息的方法
+//参数2  是要操作的那条数据
+exports.deleteOne = (collectionName,params,callback) => {
+     //通过自己封装的连接数据库的方法获取要操作的集合
+     getCollection(collectionName,(client,collection)=>{
+         //调用mongobd的删除方法
+        collection.deleteOne(params,(err,result)=>{
+           //通过回调 将修改之后的结果返回给控制器
+           client.close()
+           callback(err,result)
+        })
+    })
+}

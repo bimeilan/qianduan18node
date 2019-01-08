@@ -39,7 +39,7 @@
                       <td>{{this.phone}}</td>
                       <td>
                           <a href="/studentmanager/edit/{{this._id}}" class="btn btn-success">编辑</a>
-                          <input type="button" onclick="deleteStudent()" class="btn btn-danger" value="删除">
+                          <input type="button" onclick="deleteStudent('{{this._id}}')" class="btn btn-danger" value="删除">
                       </td>
                   </tr>
                   {{/each}}
@@ -51,6 +51,13 @@
 function search () {
     const keyword = $("#studentNameId").val()
     window.location.href = '/studentmanager/list?keyword='+keyword
+}
+
+//删除学生信息
+function deleteStudent (studentId) {
+    if(confirm("确定要删除吗")) {
+        window.location.href = "/studentmanager/delete/"+studentId
+    }
 }
 </script>
 {{/block}}

@@ -19,7 +19,7 @@ app.use(session({secret:'keyboard cat',resave:true,saveUninitialized:true,cookie
 //导入集成路由中间件   要放在所有中间件的后面
 const accountRouter = require(path.join(__dirname,'./routers/accountRouter.js'))
 const studentManagerRouter = require(path.join(__dirname,'./routers/studentManagerRouter.js'))
-console.log(typeof studentManagerRouter)
+//console.log(typeof studentManagerRouter)
 app.use('/account',accountRouter)
 app.use('/studentmanager',studentManagerRouter)
 // 3 请求处理和响应
