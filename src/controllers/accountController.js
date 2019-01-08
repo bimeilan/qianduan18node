@@ -1,6 +1,7 @@
 const path = require('path')
 // 引入生成图片验证码的包
 const captchapng = require('captchapng')
+const databasetool = require(path.join(__dirname,'../tools/databasetool.js'))
 // 导入 mongodb的客户端
 const MongoClient = require('mongodb').MongoClient
 // connection url
@@ -27,7 +28,7 @@ exports.getImageVcode = (req,res)=>{
         'Content-Type': 'image/png'
     });
     res.end(imgbase64);
-    // 2 存起来
+    // 2 存起来 
     // 3 返回  并且告知是一张图片
 }
 
@@ -41,35 +42,56 @@ exports.register = (req,res)=>{
     // 1获取传递过来的username  password
     //const params = req.body
     const {username,password} = req.body  //直接拿到两个属性的属性值对象  es6的解构赋值
-    MongoClient.connect(url,{useNewUrlParser:true},function(err,client) {
-        const db = client.db(dbName)
-        // 获取集合进行操作
-        const collection = db.collection('accountInfo')
-        // 先根据用户名查询该用户是否存在
-        collection.findOne({username},(err,doc)=>{
-            console.log(doc)
-            // 如果不存在 没找到  就返回null
-            if(doc != null) {
-                result.status = 1
-                result.message = "用户名已经存在"
-                client.close()
-                res.json(result)
-            }else { //用户名不存在的情况
-                // req.body={username:"admin",password:123}
-                collection.insertOne(req.body,(err,result1)=>{
-                    //判断插入结果是否失败 如果失败就是null
-                    if(result1 == null) { //如果等于null 代表注册失败
-                        result.status = 2
-                        result.message = "注册失败"
-                    }
-                    client.close()
-                    //如果不等于null 代表注册成功
-                    res.json(result)
-                })
-            }
-        })
-       
+    //调用databasetool这个对象的方法
+    databasetool.findOne('accountInfo',{username},(err,doc)=>{
+        if(doc != null) {
+                        result.status = 1
+                        result.message = "用户名已经存在"
+                        res.json(result)
+        }else {
+        //调用databasetool对象的方法,暴露的是一个对象,把要操作的集合和参数,传递给databasetool.js 等它操作完毕后利用回调函数把结果返回给控制器
+         databasetool.insertOne('accountInfo',req.body,(err,result1)=>{
+         if(result1 == null) { //如果等于null 代表注册失败
+                            result.status = 2
+                            result.message = "注册失败"
+                        }                       
+                        //如果不等于null 代表注册成功
+                        res.json(result)
+})
+        }
     })
+
+   
+
+    // MongoClient.connect(url,{useNewUrlParser:true},function(err,client) {
+    //     const db = client.db(dbName)
+    //     // 获取集合进行操作
+    //     const collection = db.collection('accountInfo')
+    //     // 先根据用户名查询该用户是否存在
+    //     collection.findOne({username},(err,doc)=>{
+    //         console.log(doc)
+    //         // 如果不存在 没找到  就返回null
+    //         if(doc != null) {
+    //             result.status = 1
+    //             result.message = "用户名已经存在"
+    //             client.close()
+    //             res.json(result)
+    //         }else { //用户名不存在的情况
+    //             // req.body={username:"admin",password:123}
+    //             collection.insertOne(req.body,(err,result1)=>{
+    //                 //判断插入结果是否失败 如果失败就是null
+    //                 if(result1 == null) { //如果等于null 代表注册失败
+    //                     result.status = 2
+    //                     result.message = "注册失败"
+    //                 }
+    //                 client.close()
+    //                 //如果不等于null 代表注册成功
+    //                 res.json(result)
+    //             })
+    //         }
+    //     })
+       
+    // })
     // 2 判断用户名是否存在 存在就响应用户说已经存在  不存在就先插入到数据库中 然后响应注册成功
     // 2.1 链接到mongo数据库  
 }
@@ -87,18 +109,25 @@ exports.login = (req,res)=>{
         return
     }
     //3 验证用户名和密码
-    MongoClient.connect(url,{useNewUrlParser:true},function (err,client){
-        const db = client.db(dbName)
-        // 获取集合进行操作
-        const collection = db.collection('accountInfo')
-        collection.findOne({username,password},(err,doc)=>{
-            if(doc == null) { //没查询到  用户名或密码错误
-               result.status = 2
-               result.message = "用户名或密码错误"             
-            }
-            client.close()
-            res.json(result)
-        })
+    databasetool.findOne('accountInfo',{username,password},(err,doc)=>{
+        if(doc == null) { //没查询到  用户名或密码错误
+            result.status = 2
+            result.message = "用户名或密码错误"             
+        }
+        res.json(result)
     })
+    // MongoClient.connect(url,{useNewUrlParser:true},function (err,client){
+    //     const db = client.db(dbName)
+    //     // 获取集合进行操作
+    //     const collection = db.collection('accountInfo')
+    //     collection.findOne({username,password},(err,doc)=>{
+    //         if(doc == null) { //没查询到  用户名或密码错误
+    //            result.status = 2
+    //            result.message = "用户名或密码错误"             
+    //         }
+    //         client.close()
+    //         res.json(result)
+    //     })
+    // })
     
 }
