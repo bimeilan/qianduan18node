@@ -6,4 +6,16 @@ const studentManagerCTRL = require(path.join(__dirname,'../controllers/studentMa
 // 处理请求
 // 获取学生列表页面
 studentManagerRouter.get('/list',studentManagerCTRL.getStudentListPage)
+
+//获取新增页面
+studentManagerRouter.get('/add',studentManagerCTRL.getAddStudentPage)
+
+//点击保存 新增学生信息
+studentManagerRouter.post('/add',studentManagerCTRL.addStudent)
+
+//获取修改学生信息页面
+studentManagerRouter.get('/edit/:studentId',studentManagerCTRL.getEditStudentPage)
+
+//修改学生信息成功后保存
+studentManagerRouter.post('/edit/:studentId',studentManagerCTRL.editStudent)
 module.exports = studentManagerRouter

@@ -29,3 +29,45 @@ exports.getStudentListPage = (req,res)=>{
     //     })
     // })  
 }
+
+//暴露用户点击新增按钮  渲染新增页面的方法
+exports.getAddStudentPage = (req,res) => {
+    xtpl.renderFile(path.join(__dirname,'../views/add.html'),{},(err,content)=>{
+        res.send(content)
+    })
+}
+
+//暴露点击新增后的保存方法
+exports.addStudent = (req,res)=>{
+    databasetool.insertOne('studentInfo',req.body,(err,result)=>{
+        if(result == null) {
+            res.send('<script>alert("插入失败")</script>')
+        }else {
+            res.send('<script>window.location.href = "/studentmanager/list"</script>')
+        }
+    })
+}
+//暴露点击编辑学生信息的页面
+exports.getEditStudentPage = (req,res) => {
+    const _id =databasetool.ObjectId(req.params.studentId)
+    databasetool.findOne('studentInfo',{_id},(err,doc)=>{
+      //console.log(doc)
+      xtpl.renderFile(path.join(__dirname,'../views/edit.html'),{studentInfo:doc},(err,content)=>{
+         res.send(content)
+      })
+    })
+
+}
+
+//暴露新增学生信息成功后点击修改的方法
+exports.editStudent = (req,res) =>{
+    // 获取传递过来的id
+    const _id = databasetool.ObjectId(req.params.studentId)
+    databasetool.updateOne('studentInfo',{_id},req.body,(err,result)=>{
+        if(result == null) { //失败
+            res.send('<script>alert("修改失败")</script>')
+        }else {
+            res.send('<script>window.location.href = "/studentmanager/list"</script>')
+        }
+    })
+}
