@@ -12,7 +12,7 @@ exports.getStudentListPage = (req,res)=>{
     const keyword = req.query.keyword || ""
     // 连接数据库  调用databasetool.js的方法
     databasetool.findList('studentInfo',{name:{$regex:keyword}},(err,docs)=>{
-        xtpl.renderFile(path.join(__dirname,'../views/list.html'),{studentList:docs,keyword},(err,content)=>{
+        xtpl.renderFile(path.join(__dirname,'../views/list.html'),{studentList:docs,keyword,loginedName:req.session.loginedName},(err,content)=>{
             res.send(content)
         })
     })
@@ -32,7 +32,7 @@ exports.getStudentListPage = (req,res)=>{
 
 //暴露用户点击新增按钮  渲染新增页面的方法
 exports.getAddStudentPage = (req,res) => {
-    xtpl.renderFile(path.join(__dirname,'../views/add.html'),{},(err,content)=>{
+    xtpl.renderFile(path.join(__dirname,'../views/add.html'),{loginedName:req.session.loginedName},(err,content)=>{
         res.send(content)
     })
 }
@@ -52,7 +52,7 @@ exports.getEditStudentPage = (req,res) => {
     const _id =databasetool.ObjectId(req.params.studentId)
     databasetool.findOne('studentInfo',{_id},(err,doc)=>{
       //console.log(doc)
-      xtpl.renderFile(path.join(__dirname,'../views/edit.html'),{studentInfo:doc},(err,content)=>{
+      xtpl.renderFile(path.join(__dirname,'../views/edit.html'),{studentInfo:doc,loginedName:req.session.loginedName},(err,content)=>{
          res.send(content)
       })
     })
@@ -85,3 +85,4 @@ exports.deleteStudent = (req,res) => {
         }
     })
 }
+

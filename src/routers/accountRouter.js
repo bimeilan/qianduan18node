@@ -14,5 +14,7 @@ accountRouter.get('/register',accountCTRL.getRegisterPage)
 accountRouter.post('/register',accountCTRL.register)
 // 处理注册请求
 accountRouter.post('/login',accountCTRL.login)
+//处理登出请求
+accountRouter.get('/loginout',accountCTRL.loginOut)
 // 导出路由模块
 module.exports=accountRouter

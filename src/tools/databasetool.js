@@ -63,7 +63,7 @@ exports.findList = (collectionName,params,callback) => {
         collection.find(params).toArray((err,docs)=>{
             client.close()
             //通过回调 把结果传给调用它的控制器
-            callback(err,docs)
+            callback(err,docs) 
         })
     })
 }

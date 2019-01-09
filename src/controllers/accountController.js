@@ -113,6 +113,8 @@ exports.login = (req,res)=>{
         if(doc == null) { //没查询到  用户名或密码错误
             result.status = 2
             result.message = "用户名或密码错误"             
+        }else {
+            req.session.loginedName = username
         }
         res.json(result)
     })
@@ -130,4 +132,12 @@ exports.login = (req,res)=>{
     //     })
     // })
     
+}
+
+//暴露用户登出方法
+exports.loginOut = (req,res)=>{
+    //清空session中的用户名
+    req.session.loginedName = null
+    //通过响应的形式,跳转到登录页面
+    res.send('<script>window.location.href="/account/login"</script>')
 }
