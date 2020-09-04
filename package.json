@@ -22,7 +22,7 @@
     "captchapng": "0.0.1",
     "express": "^4.16.4",
     "express-session": "^1.15.6",
-    "mongodb": "^3.1.10",
+    "mongodb": "^3.1.13",
     "xtemplate": "^4.6.1",
     "xtpl": "^3.4.0"
   }
